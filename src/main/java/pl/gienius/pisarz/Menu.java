@@ -29,9 +29,11 @@ public class Menu {
         greeting();
         System.out.println("1. Add new book");
         System.out.println("2. Show all books");
-        System.out.println("3. Block a book");
-        System.out.println("4. Unblock a book");
+        System.out.println("3. Block the book");
+        System.out.println("4. Unblock the book");
         System.out.println("5. Is the book rented?");
+        System.out.println("6. Remove the book");
+        System.out.println("7. Update the book");
         System.out.println("0. Exit");
         System.out.print("Choose an option: ");
     }
@@ -119,6 +121,7 @@ public class Menu {
     }
 
     private void printAllBooks() {
+        books = client.getBooks(writer.getId());
         if (books.isEmpty())
             System.out.println("No books");
         else {

@@ -2,9 +2,12 @@ package pl.gienius.pisarz;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.*;
 import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestTemplate;
+
+import java.util.List;
 
 public class WriterClient {
 
@@ -25,6 +28,25 @@ public class WriterClient {
         logger.info("Sent request to addWriter " + name);
         return response.getBody();
     }
+
+    public List<Book> getBooks(Long writerId){
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_JSON);
+        headers.add("Writer-ID", writerId.toString());
+
+        String booksUrl = "http://localhost:3000/api/books";
+
+        HttpEntity<?> request = new HttpEntity<>(headers);
+
+        ResponseEntity<List<Book>> response = restTemplate.exchange(
+                booksUrl,
+                HttpMethod.GET,
+                request,
+                new ParameterizedTypeReference<List<Book>>() {});
+        logger.info("Got writer books");
+        return response.getBody();
+    }
+
 
     public Book addNewBook(Book book, Long writerId) {
         HttpHeaders headers = new HttpHeaders();
