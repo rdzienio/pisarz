@@ -122,7 +122,7 @@ public class Menu {
 
     private void printAllBooks() {
         books = client.getBooks(writer.getId());
-        if (books.isEmpty())
+        if (books == null || books.isEmpty())
             System.out.println("No books");
         else {
             for (Book book : books) {
