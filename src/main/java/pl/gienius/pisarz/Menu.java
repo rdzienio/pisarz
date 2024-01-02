@@ -175,8 +175,14 @@ public class Menu {
         Scanner scanner = new Scanner(System.in);
         printAllBooks();
         System.out.println("Which book to update: ");
-        long bookId = scanner.nextLong();
-        Book bookToUpdate = books.get(Math.toIntExact(bookId));
+        int bookId = scanner.nextInt();
+        scanner.nextLine();
+        System.out.println("chosen book:" + bookId);
+        Book bookToUpdate = new Book();
+        for (Book book : books) {
+            if(book.getId() == bookId) {bookToUpdate = book; break; }
+        }
+        if(bookToUpdate == null) return;
         System.out.println("Change the title: [press ENTER to skip] " + bookToUpdate.getTitle());
         String newTitle = scanner.nextLine();
         if(newTitle!=null && !newTitle.isBlank())
@@ -189,7 +195,8 @@ public class Menu {
         String newReleaseDate = scanner.nextLine();
         if(newReleaseDate!=null && !newReleaseDate.isBlank())
             bookToUpdate.setReleaseDate(LocalDate.parse(newReleaseDate));
-        if(client.updateBook(bookId, bookToUpdate, writer.getId()))
+        System.out.println("Updated book: " + bookToUpdate);
+        if(client.updateBook((long) bookId, bookToUpdate, writer.getId()))
             System.out.println("The book is updated successfully");
         else
             System.out.println("Failed! Something went wrong...");

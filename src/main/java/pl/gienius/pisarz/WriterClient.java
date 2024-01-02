@@ -155,10 +155,12 @@ public class WriterClient {
 
         String updateUrl = baseUrl + "/update/" + bookId;
 
-        ResponseEntity<Boolean> response = restTemplate.exchange(updateUrl, HttpMethod.PUT, new HttpEntity<>(headers), Boolean.class);
-        logger.info("Requested to update the book: " + bookId + "response: " + response);
+        HttpEntity<Book> request = new HttpEntity<>(updatedBook, headers);
+        ResponseEntity<Book> response = restTemplate.exchange(updateUrl, HttpMethod.PUT, request, Book.class);
+        logger.info("Requested to update the book: " + bookId + " response: " + response);
         return response.getStatusCode() == HttpStatus.OK;
     }
+
 
     public boolean removeBook(Long bookId, Long writerId) {
         HttpHeaders headers = new HttpHeaders();
