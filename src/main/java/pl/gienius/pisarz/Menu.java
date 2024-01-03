@@ -65,16 +65,15 @@ public class Menu {
                 case 7:
                     updateBookMenu();
                     break;
-                case 0:
-                    {
-                        System.out.println("Exiting...");
-                        return;
-                    }
-                    default:
-                        System.out.println("Invalid option. Please try again.");
+                case 0: {
+                    System.out.println("Exiting...");
+                    return;
                 }
+                default:
+                    System.out.println("Invalid option. Please try again.");
             }
         }
+    }
 
     private void createNewWriter() {
         Scanner scanner = new Scanner(System.in);
@@ -135,7 +134,7 @@ public class Menu {
         }
     }
 
-    private void blockBookMenu(){
+    private void blockBookMenu() {
         Scanner scanner = new Scanner(System.in);
         printAllBooks();
         System.out.println("Which book to block: ");
@@ -143,7 +142,7 @@ public class Menu {
         client.blockBook(bookId, writer.getId());
     }
 
-    private void unBlockBookMenu(){
+    private void unBlockBookMenu() {
         Scanner scanner = new Scanner(System.in);
         printAllBooks();
         System.out.println("Which book to unblock: ");
@@ -151,52 +150,59 @@ public class Menu {
         client.unBlockBook(bookId, writer.getId());
     }
 
-    private void checkBookMenu(){
+    private void checkBookMenu() {
         Scanner scanner = new Scanner(System.in);
         printAllBooks();
         System.out.println("Which book to check: ");
         Long bookId = scanner.nextLong();
-        if(client.checkBook(bookId, writer.getId()))
+        if (client.checkBook(bookId, writer.getId()))
             System.out.println("The book is not rented already");
     }
 
-    private void removeBookMenu(){
+    private void removeBookMenu() {
         Scanner scanner = new Scanner(System.in);
         printAllBooks();
         System.out.println("Which book to remove: ");
         Long bookId = scanner.nextLong();
-        if(client.removeBook(bookId, writer.getId()))
+        if (client.removeBook(bookId, writer.getId()))
             System.out.println("The book is removed successfully");
         else
             System.out.println("Failed! Something went wrong...");
     }
 
-    private void updateBookMenu(){
+    private void updateBookMenu() {
         Scanner scanner = new Scanner(System.in);
         printAllBooks();
         System.out.println("Which book to update: ");
         int bookId = scanner.nextInt();
+        if (!client.checkBook((long) bookId, writer.getId())) {
+            System.out.println("The book is not ready to update");
+            return;
+        }
         scanner.nextLine();
         System.out.println("chosen book:" + bookId);
         Book bookToUpdate = new Book();
         for (Book book : books) {
-            if(book.getId() == bookId) {bookToUpdate = book; break; }
+            if (book.getId() == bookId) {
+                bookToUpdate = book;
+                break;
+            }
         }
-        if(bookToUpdate == null) return;
+        if (bookToUpdate == null) return;
         System.out.println("Change the title: [press ENTER to skip] " + bookToUpdate.getTitle());
         String newTitle = scanner.nextLine();
-        if(newTitle!=null && !newTitle.isBlank())
+        if (newTitle != null && !newTitle.isBlank())
             bookToUpdate.setTitle(newTitle);
         System.out.println("Change the description: [press ENTER to skip] " + bookToUpdate.getDescription());
         String newDescription = scanner.nextLine();
-        if(newDescription!=null && !newDescription.isBlank())
+        if (newDescription != null && !newDescription.isBlank())
             bookToUpdate.setDescription(newDescription);
         System.out.println("Change the release date: [press ENTER to skip] " + bookToUpdate.getReleaseDate());
         String newReleaseDate = scanner.nextLine();
-        if(newReleaseDate!=null && !newReleaseDate.isBlank())
+        if (newReleaseDate != null && !newReleaseDate.isBlank())
             bookToUpdate.setReleaseDate(LocalDate.parse(newReleaseDate));
         System.out.println("Updated book: " + bookToUpdate);
-        if(client.updateBook((long) bookId, bookToUpdate, writer.getId()))
+        if (client.updateBook((long) bookId, bookToUpdate, writer.getId()))
             System.out.println("The book is updated successfully");
         else
             System.out.println("Failed! Something went wrong...");

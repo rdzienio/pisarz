@@ -97,7 +97,7 @@ public class WriterClient {
 
         HttpEntity<?> request = new HttpEntity<>(headers);
         try {
-            ResponseEntity<Void> response = restTemplate.exchange(blockUrl, HttpMethod.POST, request, Void.class);
+            ResponseEntity<Void> response = restTemplate.exchange(blockUrl, HttpMethod.DELETE, request, Void.class);
             if (response.getStatusCode() == HttpStatus.OK)
                 logger.info("Unblocked the book: " + bookId + " response: " + response.getStatusCode());
         } catch (HttpClientErrorException e) {
@@ -149,6 +149,7 @@ public class WriterClient {
     }
 
     public boolean updateBook(Long bookId, Book updatedBook, Long writerId) {
+        if(!checkBook(bookId, writerId)) return false;
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
         headers.add("Writer-ID", writerId.toString());
@@ -163,6 +164,7 @@ public class WriterClient {
 
 
     public boolean removeBook(Long bookId, Long writerId) {
+        if(!checkBook(bookId, writerId)) return false;
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
         headers.add("Writer-ID", writerId.toString());
